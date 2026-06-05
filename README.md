@@ -232,6 +232,7 @@ No IntelliJ, basta abrir o arquivo `Main.java` e clicar no botao verde ao lado d
 - Padrao Strategy
 - Padrao Factory Method
 
-## Autor
+## Autores
 
 Lucas Emanuel Costa
+Silas Novaes 
