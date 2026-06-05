@@ -12,8 +12,25 @@ import java.util.Scanner;
 
 public class JogoService {
 
-    private final Scanner scanner = new Scanner(System.in);
-    private final Random random = new Random();
+    // INSTÂNCIA ÚNICA (Padrão Singleton)
+    private static JogoService instancia;
+
+    private final Scanner scanner;
+    private final Random random;
+
+    // CONSTRUTOR PRIVADO: Impede que outras classes façam "new JogoService()"
+    private JogoService() {
+        this.scanner = new Scanner(System.in);
+        this.random = new Random();
+    }
+
+    // PONTO DE ACESSO GLOBAL: Retorna sempre a mesma instância
+    public static JogoService getInstancia() {
+        if (instancia == null) {
+            instancia = new JogoService();
+        }
+        return instancia;
+    }
 
     public void iniciarMundo(Jogador jogador, OperacaoMatematica operacao) {
         FabricaFase fabricaFase = new FabricaFaseMatematica(operacao);

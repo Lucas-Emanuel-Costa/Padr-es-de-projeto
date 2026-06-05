@@ -1,7 +1,6 @@
 package br.com.mathquest;
 
-import br.com.mathquest.model.Jogador;
-import br.com.mathquest.service.JogoService;
+import br.com.mathquest.facade.MathQuestFacade;
 import br.com.mathquest.strategy.Divisao;
 import br.com.mathquest.strategy.Multiplicacao;
 import br.com.mathquest.strategy.OperacaoMatematica;
@@ -14,63 +13,48 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        JogoService jogoService = new JogoService();
+
+        // Instanciamos o nosso Facade (Fachada)
+        MathQuestFacade facade = new MathQuestFacade();
 
         System.out.println("====================================");
-        System.out.println("         MATH QUEST");
+        System.out.println("        BEM-VINDO AO MATH QUEST     ");
         System.out.println("====================================");
-        System.out.println("Bem-vindo ao jogo de matematica!");
 
-        System.out.print("Digite seu nome: ");
+        System.out.print("Digite o seu nome: ");
         String nome = scanner.nextLine();
 
-        Jogador jogador = new Jogador(nome);
-
-        OperacaoMatematica operacaoEscolhida = escolherOperacao(scanner);
-
-        if (operacaoEscolhida == null) {
-            System.out.println("Opcao invalida. O jogo sera encerrado.");
-            return;
-        }
-
-        jogoService.iniciarMundo(jogador, operacaoEscolhida);
-
-        System.out.println();
-        System.out.println("Obrigado por jogar, " + jogador.getNome() + "!");
-    }
-
-    private static OperacaoMatematica escolherOperacao(Scanner scanner) {
-        System.out.println();
-        System.out.println("Escolha o mundo que deseja jogar:");
+        System.out.println("\nEscolha o mundo que deseja enfrentar:");
         System.out.println("1 - Mundo da Soma");
         System.out.println("2 - Mundo da Subtracao");
         System.out.println("3 - Mundo da Multiplicacao");
         System.out.println("4 - Mundo da Divisao");
-        System.out.print("Opcao: ");
+        System.out.print("Sua escolha: ");
+        int opcao = scanner.nextInt();
 
-        int opcao = lerOpcao(scanner);
-
+        OperacaoMatematica operacao;
         switch (opcao) {
             case 1:
-                return new Soma();
+                operacao = new Soma();
+                break;
             case 2:
-                return new Subtracao();
+                operacao = new Subtracao();
+                break;
             case 3:
-                return new Multiplicacao();
+                operacao = new Multiplicacao();
+                break;
             case 4:
-                return new Divisao();
+                operacao = new Divisao();
+                break;
             default:
-                return null;
-        }
-    }
-
-    private static int lerOpcao(Scanner scanner) {
-        while (!scanner.hasNextInt()) {
-            System.out.println("Digite apenas numeros.");
-            scanner.next();
-            System.out.print("Opcao: ");
+                System.out.println("Opcao invalida. Iniciando no Mundo da Soma por padrao.");
+                operacao = new Soma();
+                break;
         }
 
-        return scanner.nextInt();
+        // Delegação limpa para o Facade iniciar toda a complexidade
+        facade.iniciarPartida(nome, operacao);
+
+        scanner.close();
     }
 }
